@@ -1,0 +1,7 @@
+{
+  "name": "Repertório XP",
+  "description": "Um aplicativo moderno para gerenciar seu repertório musical para performances em restaurantes, com filtros por estilo e cadastro completo de músicas.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
