@@ -1,12 +1,20 @@
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { Song } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Função auxiliar para criar o cliente Gemini de forma segura
+const getAIClient = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    console.warn("Aviso: API_KEY não configurada na Vercel. Algumas funções de IA não funcionarão.");
+  }
+  return new GoogleGenAI({ apiKey: apiKey || "" });
+};
 
 export const suggestSetlistOrder = async (songs: Song[]): Promise<string[]> => {
   if (songs.length === 0) return [];
 
+  const ai = getAIClient();
   const prompt = `Considere a seguinte lista de músicas para uma performance em um restaurante:
   ${songs.map(s => `- ${s.title} (${s.style}, Tom: ${s.key}, Banda: ${s.band})`).join('\n')}
 
@@ -25,6 +33,7 @@ export const suggestSetlistOrder = async (songs: Song[]): Promise<string[]> => {
 };
 
 export const getSmartObservation = async (songTitle: string, band: string): Promise<string> => {
+  const ai = getAIClient();
   const prompt = `Dê uma dica curta de performance ou curiosidade rápida (máximo 15 palavras) para a música "${songTitle}" da banda "${band}" para um músico de restaurante comentar com o público ou se preparar.`;
   
   try {

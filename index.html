@@ -10,8 +10,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
-      // Shim para evitar erro de 'process is not defined' no navegador
-      window.process = { env: { API_KEY: "" } };
+      // Garante que o objeto process exista antes de qualquer módulo carregar
+      window.process = window.process || { env: { API_KEY: "" } };
+      
+      // Capturador de erros para ajudar no debug se a tela ficar branca
+      window.onerror = function(msg, url, lineNo, columnNo, error) {
+        console.error('Erro Global:', msg, 'em', url, 'linha:', lineNo);
+        return false;
+      };
     </script>
     <style>
       body {

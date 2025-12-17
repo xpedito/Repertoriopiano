@@ -9,6 +9,15 @@ import { FilterBar } from './components/FilterBar';
 const STORAGE_KEY = 'xp_setlist_songs';
 const CUSTOM_STYLES_KEY = 'xp_custom_styles';
 
+// Função segura para gerar IDs
+const generateId = () => {
+  try {
+    return crypto.randomUUID();
+  } catch (e) {
+    return Math.random().toString(36).substring(2, 15);
+  }
+};
+
 const App: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [customStyles, setCustomStyles] = useState<string[]>([]);
@@ -48,7 +57,7 @@ const App: React.FC = () => {
     localStorage.setItem(CUSTOM_STYLES_KEY, JSON.stringify(customStyles));
   }, [customStyles]);
 
-  // Compute all available styles (now purely based on custom ones)
+  // Compute all available styles
   const availableStyles = useMemo(() => {
     return [...customStyles].sort((a, b) => a.localeCompare(b));
   }, [customStyles]);
@@ -65,14 +74,13 @@ const App: React.FC = () => {
   }, [songs, selectedStyle, searchQuery]);
 
   const handleAddSong = (newSongData: Omit<Song, 'id' | 'createdAt'>) => {
-    // Add to custom list if not already there
     if (newSongData.style && !customStyles.includes(newSongData.style)) {
       setCustomStyles(prev => [...prev, newSongData.style]);
     }
 
     const newSong: Song = {
       ...newSongData,
-      id: crypto.randomUUID(),
+      id: generateId(),
       createdAt: Date.now()
     };
     setSongs(prev => [...prev, newSong]);
