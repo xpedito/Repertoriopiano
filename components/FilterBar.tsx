@@ -3,7 +3,6 @@ import React from 'react';
 
 interface FilterBarProps {
   availableStyles: string[];
-  defaultStyles: string[];
   selectedStyle: string | null;
   onSelectStyle: (style: string | null) => void;
   onDeleteStyle: (style: string) => void;
@@ -11,7 +10,6 @@ interface FilterBarProps {
 
 export const FilterBar: React.FC<FilterBarProps> = ({ 
   availableStyles, 
-  defaultStyles,
   selectedStyle, 
   onSelectStyle, 
   onDeleteStyle 
@@ -23,7 +21,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       {styles.map(style => {
         const value = style === 'Todos' ? null : style;
         const isActive = selectedStyle === value;
-        const isDeletable = value !== null && !defaultStyles.includes(style);
+        const isDeletable = value !== null; // Agora todos os estilos exceto "Todos" podem ser deletados
         
         return (
           <div key={style} className="relative group flex-shrink-0">

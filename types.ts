@@ -1,6 +1,13 @@
 
+export interface Location {
+  id: string;
+  name: string;
+  createdAt: number;
+}
+
 export interface Song {
   id: string;
+  locationId: string; // Vínculo com o local
   title: string;
   key: string;
   band: string;
@@ -10,4 +17,4 @@ export interface Song {
   createdAt: number;
 }
 
-export type ViewType = 'list' | 'add' | 'edit';
+export type ViewType = 'list' | 'add' | 'edit' | 'ai-setlist' | 'locations';
