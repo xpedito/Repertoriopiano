@@ -10,21 +10,21 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title, onTitleClick, onAddClick, showAddButton }) => {
   return (
-    <header className="sticky top-0 z-40 bg-white/80 apple-blur border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+    <header className="sticky top-0 z-40 bg-black/80 apple-blur border-b border-white/10 px-6 py-4 flex items-center justify-between">
       <div 
         className={`flex items-center gap-3 ${onTitleClick ? 'cursor-pointer active:opacity-60 transition-opacity' : ''}`}
         onClick={onTitleClick}
       >
-        <div className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-          <div className="w-full h-full bg-[#e1e6ed] flex items-center justify-center relative">
-            <span className="text-[#0033cc] font-black text-sm tracking-tighter">XP</span>
-            <span className="absolute bottom-1 text-[#0033cc] text-[5px] font-bold tracking-widest uppercase">studio</span>
+        <div className="w-10 h-10 rounded-full bg-[#1c1c1e] border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+          <div className="w-full h-full bg-[#2c2c2e] flex items-center justify-center relative">
+            <span className="text-blue-500 font-black text-sm tracking-tighter">XP</span>
+            <span className="absolute bottom-1 text-blue-500/50 text-[5px] font-bold tracking-widest uppercase">studio</span>
           </div>
         </div>
         <div className="flex items-center gap-1.5 overflow-hidden">
-          <h1 className="text-xl font-black tracking-tight text-gray-900 truncate">{title}</h1>
+          <h1 className="text-xl font-black tracking-tight text-white truncate">{title}</h1>
           {onTitleClick && (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 mt-1" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500 mt-1" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           )}

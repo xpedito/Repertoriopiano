@@ -10,7 +10,7 @@ import { suggestSetlistOrder } from './services/geminiService';
 
 const SONGS_KEY = 'xp_setlist_songs_v2';
 const LOCATIONS_KEY = 'xp_locations';
-const CUSTOM_STYLES_KEY = 'xp_custom_styles_v2'; // Nova chave para resetar se necessário
+const CUSTOM_STYLES_KEY = 'xp_custom_styles_v2';
 const LAST_LOCATION_KEY = 'xp_last_location';
 
 const INITIAL_STYLES = ['Toada', 'Rock', 'Rock Internacional', 'MPB', 'Pop'];
@@ -35,7 +35,6 @@ const App: React.FC = () => {
   const [aiSuggestedOrder, setAiSuggestedOrder] = useState<string[]>([]);
   const [isGeneratingSetlist, setIsGeneratingSetlist] = useState(false);
 
-  // Initial load
   useEffect(() => {
     const savedLocations = localStorage.getItem(LOCATIONS_KEY);
     const savedSongs = localStorage.getItem(SONGS_KEY);
@@ -50,18 +49,14 @@ const App: React.FC = () => {
         setView('list');
       }
     }
-    
     if (savedSongs) setSongs(JSON.parse(savedSongs));
-    
     if (savedStyles) {
       setCustomStyles(JSON.parse(savedStyles));
     } else {
-      // Se for a primeira vez, carrega os iniciais
       setCustomStyles(INITIAL_STYLES);
     }
   }, []);
 
-  // Persistence
   useEffect(() => {
     localStorage.setItem(LOCATIONS_KEY, JSON.stringify(locations));
   }, [locations]);
@@ -156,7 +151,7 @@ const App: React.FC = () => {
   };
 
   const handleDeleteStyle = (styleToDelete: string) => {
-    if (confirm(`Deseja apagar a categoria "${styleToDelete}"? Músicas cadastradas com este estilo continuarão com ele, mas a categoria não aparecerá mais no filtro.`)) {
+    if (confirm(`Deseja apagar a categoria "${styleToDelete}"?`)) {
       setCustomStyles(prev => prev.filter(s => s !== styleToDelete));
       if (selectedStyle === styleToDelete) setSelectedStyle(null);
     }
@@ -174,7 +169,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] flex flex-col max-w-lg mx-auto shadow-2xl overflow-hidden relative border-x border-gray-100 pb-20">
+    <div className="min-h-screen bg-black flex flex-col max-w-lg mx-auto shadow-2xl overflow-hidden relative border-x border-white/5 pb-20">
       {(view === 'list' || view === 'ai-setlist') && (
         <>
           <Header 
@@ -186,14 +181,14 @@ const App: React.FC = () => {
           
           {view === 'list' && (
             <>
-              <div className="px-6 py-4 bg-white/50 apple-blur border-b border-gray-200">
+              <div className="px-6 py-4 bg-black/50 apple-blur border-b border-white/5">
                 <div className="relative">
                   <input 
                     type="text"
                     placeholder="Buscar música ou banda..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="w-full bg-gray-200/80 py-3.5 pl-11 pr-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-900 font-medium"
+                    className="w-full bg-[#1c1c1e] py-3.5 pl-11 pr-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all text-white font-medium placeholder:text-gray-500"
                   />
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 absolute left-3.5 top-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -201,7 +196,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-white/50 apple-blur border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+              <div className="bg-black/50 apple-blur border-b border-white/5 px-4 py-2 flex items-center justify-between">
                 <FilterBar 
                   availableStyles={availableStyles}
                   selectedStyle={selectedStyle} 
@@ -211,10 +206,10 @@ const App: React.FC = () => {
                 <button 
                   onClick={handleSuggestSetlist}
                   disabled={isGeneratingSetlist || filteredSongs.length < 2}
-                  className="ml-2 flex-shrink-0 bg-indigo-50 text-indigo-700 p-2.5 rounded-full hover:bg-indigo-100 transition-colors disabled:opacity-30"
+                  className="ml-2 flex-shrink-0 bg-blue-600/10 text-blue-400 p-2.5 rounded-full hover:bg-blue-600/20 transition-colors disabled:opacity-30"
                 >
                   {isGeneratingSetlist ? (
-                    <div className="w-5 h-5 border-2 border-indigo-700 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -236,7 +231,7 @@ const App: React.FC = () => {
               )
             ) : (
               <div className="space-y-4">
-                <button onClick={() => setView('list')} className="flex items-center gap-2 text-blue-600 font-bold text-sm mb-4">
+                <button onClick={() => setView('list')} className="flex items-center gap-2 text-blue-400 font-bold text-sm mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                   </svg>
@@ -247,7 +242,7 @@ const App: React.FC = () => {
                   if (!song) return null;
                   return (
                     <div key={song.id} className="flex gap-4 items-center">
-                      <span className="text-2xl font-black text-gray-300 w-8 text-right">{idx + 1}</span>
+                      <span className="text-2xl font-black text-[#2c2c2e] w-8 text-right">{idx + 1}</span>
                       <div className="flex-1">
                         <SongCard song={song} onEdit={s => { setEditingSong(s); setView('edit'); }} onDelete={(id) => setSongs(prev => prev.filter(s => s.id !== id))} />
                       </div>
@@ -258,16 +253,16 @@ const App: React.FC = () => {
             )}
           </main>
           
-          <nav className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white/90 apple-blur border-t border-gray-200 flex justify-around py-3 px-6 safe-area-bottom">
-            <button onClick={() => setView('list')} className={`flex flex-col items-center gap-1 ${view === 'list' ? 'text-blue-600' : 'text-gray-400'}`}>
+          <nav className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-black/80 apple-blur border-t border-white/10 flex justify-around py-3 px-6 safe-area-bottom">
+            <button onClick={() => setView('list')} className={`flex flex-col items-center gap-1 ${view === 'list' ? 'text-blue-500' : 'text-gray-500'}`}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
               <span className="text-[10px] font-bold uppercase">Repertório</span>
             </button>
-            <button onClick={handleSuggestSetlist} className={`flex flex-col items-center gap-1 ${view === 'ai-setlist' ? 'text-blue-600' : 'text-gray-400'}`}>
+            <button onClick={handleSuggestSetlist} className={`flex flex-col items-center gap-1 ${view === 'ai-setlist' ? 'text-blue-500' : 'text-gray-500'}`}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               <span className="text-[10px] font-bold uppercase">Show (IA)</span>
             </button>
-            <button onClick={() => setView('locations')} className={`flex flex-col items-center gap-1 text-gray-400`}>
+            <button onClick={() => setView('locations')} className={`flex flex-col items-center gap-1 text-gray-500`}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               <span className="text-[10px] font-bold uppercase">Lugares</span>
             </button>
@@ -289,10 +284,10 @@ const App: React.FC = () => {
 
 const EmptyState = ({ onAdd, isSearch }: { onAdd: () => void, isSearch: boolean }) => (
   <div className="flex flex-col items-center justify-center py-20 text-center">
-    <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center mb-6 text-gray-400">
+    <div className="bg-[#1c1c1e] w-24 h-24 rounded-full flex items-center justify-center mb-6 text-gray-600">
       <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
     </div>
-    <h3 className="text-lg font-bold text-gray-900">{isSearch ? "Nada por aqui" : "Local sem músicas"}</h3>
+    <h3 className="text-lg font-bold text-white">{isSearch ? "Nada por aqui" : "Local sem músicas"}</h3>
     <p className="text-sm text-gray-500 max-w-[240px] mt-2 font-medium">
       {isSearch ? "Ajuste sua busca ou filtro." : "Crie um repertório exclusivo para este lugar."}
     </p>
